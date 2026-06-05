@@ -1,52 +1,58 @@
-// Copyright 2025 NNTU-CS
 #include <cstdint>
-#include "alg.h"
 
-uint64_t collatzMaxValue(uint64_t num) {
-uint64_t max = num;
+unsigned int collatzLen(uint64_t num)
+{
+    unsigned int len = 1;
 
-    while (num != 1) {
+    while (num != 1)
+    {
         if (num % 2 == 0)
             num /= 2;
         else
             num = 3 * num + 1;
 
-        if (num > max)
-            max = num;
+        ++len;
     }
 
-    return max;
+    return len;
 }
 
-unsigned int collatzLen(uint64_t num) {
-unsigned int length = 1;
+uint64_t collatzMaxValue(uint64_t num)
+{
+    uint64_t maxValue = num;
 
-    while (num != 1) {
+    while (num != 1)
+    {
         if (num % 2 == 0)
             num /= 2;
         else
             num = 3 * num + 1;
 
-        length++;
+        if (num > maxValue)
+            maxValue = num;
     }
 
-    return length;
+    return maxValue;
 }
 
 unsigned int seqCollatz(unsigned int *maxlen,
                         uint64_t lbound,
-                        uint64_t rbound) {
+                        uint64_t rbound)
+{
+    uint64_t bestNum = lbound;
+    unsigned int bestLen = 0;
 
-    unsigned int bestNum = 0;
-    *maxlen = 0;
+    for (uint64_t n = lbound; n <= rbound; ++n)
+    {
+        unsigned int len = collatzLen(n);
 
-    for (uint64_t i = lbound; i <= rbound; i++) {
-        unsigned int len = collatzLen(i);
-
-        if (len > *maxlen) {
-            *maxlen = len;
-            bestNum = i;
+        if (len > bestLen)
+        {
+            bestLen = len;
+            bestNum = n;
         }
     }
 
+    *maxlen = bestLen;
+    return static_cast<unsigned int>(bestNum);
 }
