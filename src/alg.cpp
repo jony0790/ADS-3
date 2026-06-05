@@ -1,61 +1,55 @@
-#include <cstdint>
+// Copyright 2026
+
 #include "alg.h"
-// Collatz ketma-ketligi uzunligi
-unsigned int collatzLen(uint64_t num)
-{
+
+unsigned int collatzLen(uint64_t num) {
     unsigned int len = 1;
 
-    while (num != 1)
-    {
-        if (num & 1)
-            num = 3 * num + 1;
-        else
+    while (num != 1) {
+        if (num % 2 == 0) {
             num /= 2;
-
+        } else {
+            num = 3 * num + 1;
+        }
         ++len;
     }
 
     return len;
 }
 
-// Collatz ketma-ketligidagi maksimal qiymat
-uint64_t collatzMaxValue(uint64_t num)
-{
-    uint64_t maxValue = num;
+uint64_t collatzMaxValue(uint64_t num) {
+    uint64_t max_value = num;
 
-    while (num != 1)
-    {
-        if (num & 1)
-            num = 3 * num + 1;
-        else
+    while (num != 1) {
+        if (num % 2 == 0) {
             num /= 2;
+        } else {
+            num = 3 * num + 1;
+        }
 
-        if (num > maxValue)
-            maxValue = num;
-    }
-
-    return maxValue;
-}
-
-// [lbound, rbound] oralig'ida eng uzun ketma-ketlik beruvchi son
-unsigned int seqCollatz(unsigned int *maxlen,
-                        uint64_t lbound,
-                        uint64_t rbound)
-{
-    uint64_t bestNum = lbound;
-    unsigned int bestLen = 0;
-
-    for (uint64_t n = lbound; n <= rbound; ++n)
-    {
-        unsigned int len = collatzLen(n);
-
-        if (len > bestLen)
-        {
-            bestLen = len;
-            bestNum = n;
+        if (num > max_value) {
+            max_value = num;
         }
     }
 
-    *maxlen = bestLen;
-    return static_cast<unsigned int>(bestNum);
+    return max_value;
+}
+
+unsigned int seqCollatz(unsigned int *maxlen,
+                        uint64_t lbound,
+                        uint64_t rbound) {
+    uint64_t best_num = lbound;
+    unsigned int best_len = 0;
+
+    for (uint64_t n = lbound; n <= rbound; ++n) {
+        unsigned int len = collatzLen(n);
+
+        if (len > best_len) {
+            best_len = len;
+            best_num = n;
+        }
+    }
+
+    *maxlen = best_len;
+    return static_cast<unsigned int>(best_num);
 }
